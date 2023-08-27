@@ -1,0 +1,100 @@
+/* Find the length of largest subarray with 0 sum
+Input: arr[] = {15, -2, 2, -8, 1, 7, 10, 23}
+Output: 5
+Explanation: The longest sub-array with elements summing up-to 0 is {-2, 2, -8, 1, 7}
+
+Input: arr[] = {1, 2, 3}
+Output: 0
+Explanation: There is no subarray with 0 sum*/
+
+solve = (arr) => {
+  let map = {};
+  
+  let sum = 0;
+  let max_length = 0;
+  for (let i = 0; i < arr.length; i++) {
+    sum = sum + arr[i];
+    
+	// if there is any value present in the map then find the difference between the two ranges.
+    if (map.hasOwnProperty(sum)) {
+      max_length = Math.max(max_length, i - map[sum]);
+    } else {
+	// store that sum and index pair in the map.
+      map[sum] = i;
+    }
+  }
+  
+  return max_length;
+}
+
+let ans = solve([15, -2, 2, -8, 1, 7, 10, 23]);
+console.log(ans);
+
+/*Problem Description
+ 
+ Given an array A of N integers.
+
+Find the largest continuous sequence in a array which sums to zero.
+
+
+
+Problem Constraints
+1 <= N <= 106
+
+ -107 <= A[i] <= 107
+
+
+
+Input Format
+Single argument which is an integer array A.
+
+
+
+Output Format
+Return an array denoting the longest continuous sequence with total sum of zero.
+
+NOTE : If there are multiple correct answers, return the sequence which occurs first in the array.
+
+
+
+Example Input
+A = [1,2,-2,4,-4]
+
+
+Example Output
+[2,-2,4,-4]
+
+
+Example Explanation
+[2,-2,4,-4] is the longest sequence with total sum of zero.*/
+
+solve = (arr) => {
+  let map = {};
+  // this is initialized for the condition when all the elements from 
+  // the start make a sum of 0. i.e from index 0 to i;
+  map[0] = -1;
+  
+  let sum = 0;
+  let max_length = 0;
+  let start = -1;
+  let end = -1;
+  
+  for (let i = 0; i < arr.length; i++) {
+    sum = sum + arr[i];
+    
+    if (map.hasOwnProperty(sum)) {
+      if (i - map[sum] > max_length) {
+        start = map[sum];
+        end = i;
+        max_length = i - map[sum];
+      }
+    } else {
+      map[sum] = i;
+    }
+  }
+  
+  return arr.filter((value, index) => index > start && index <= end);
+}
+
+let ans = solve([1, 2, -3, 3]);
+console.log(ans);
