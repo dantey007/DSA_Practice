@@ -1,0 +1,88 @@
+roblem Description
+ 
+ 
+
+For Given Number A, find if it's a COLORFUL number or not.
+
+COLORFUL number:
+A number can be broken into different contiguous sub-subsequence parts. 
+Suppose, a number 3245 can be broken into parts like 3 2 4 5 32 24 45 324 245. 
+And this number is a COLORFUL number, since product of every digit of a contiguous subsequence is different
+Return 1 if A is a COLORFUL number, else return 0
+
+
+
+Problem Constraints
+0 <= A <= 109
+
+
+Input Format
+The first argument is an integer A.
+
+
+Output Format
+Return 1 if A is a COLORFUL number, else return 0
+
+
+Example Input
+A = 23
+
+
+Example Output
+1
+
+
+Example Explanation
+A = 23
+2 3 23
+2 -> 2
+3 -> 3
+23 -> 6
+this number is a COLORFUL number since the product of every digit of a sub-sequence is different.
+
+Output: 1
+
+
+checkColourFull = (A) => {
+        
+        // just to find the number of digits.
+        findDigits = number => {
+            return number == 0 ? 0 : 1 + findDigits(parseInt(number / 10));
+        };
+        let digits = findDigits(A);
+        
+        let numbers = (() => {
+          let arr = [];
+          while(A) {
+            arr.push(A%10);
+            A = parseInt(A/10);
+          }
+          return arr;
+        })();
+        
+        // creating a map.
+        let map = {};
+        // filling the 2d array with digits.
+        let arr = Array.from(Array(digits), () => new Array(digits).fill(0));
+        
+        for(let i = 0; i < digits; i++) {
+          arr[0][i] = numbers[i];
+          // add individual numbers as product in the array.
+          map[numbers[i]] = true;
+        }
+        
+        for (let i = 1; i < digits; i++) {
+          for (let j = i; j < digits; j++) {
+            arr[i][j] = arr[i-1][j-1] * numbers[j];
+            if (map[arr[i][j]]) {
+              return 0;
+            } else {
+              map[arr[i][j]] = true;
+            }
+          }
+        }
+        
+        return 1;
+}
+
+checkColourFull(3245)
